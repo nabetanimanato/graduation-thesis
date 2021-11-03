@@ -10,6 +10,7 @@ PATTERN = 3 # 部品タイプの数
 MACHINE = 6
 MACHINE_SELECTION = {1:[1,2],2:[3,4],3:[5,6]} # タイプから担当機械を選択する辞書を作成
 
+
 class SimpleGA:
     def __init__(self):
         self.N = 100 # 個体数
@@ -44,8 +45,19 @@ class Chromosome:
             self.sample = random.randint(min(self.machine_list),max(self.machine_list))
             self.selected_machine.append(self.sample)
         self.array_selected_machine = np.array(self.selected_machine).reshape(JOB,1)
-        self.gene = np.concatenate([self.array_process_time,self.array_worker,self.array_selected_machine],axis = 1)
-        # ,self.array_order
+        
+        # 機械ごとの作業順番の設定
+        self.order_sample = [0,0,0,0,0,0]
+        self.order = []
+        for i in self.array_selected_machine:
+            self.order_sample[int(i-1)] += 1
+            self.order.append(self.order_sample[int(i-1)])
+            
+        self.array_order = np.array(self.order).reshape(JOB,1)
+        
+        # 一つの行列に結合
+        self.gene = np.concatenate([self.array_process_time,self.array_worker,self.array_selected_machine,
+                                    self.array_order],axis = 1)
         # self.MUTATION_RATE = 0.05 # 突然変異率
 
     def mutate(self):
