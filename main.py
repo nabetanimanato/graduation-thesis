@@ -4,12 +4,11 @@ import random
 # 問題の設定
 PROCESS_MIN = 1 # 加工時間の最小
 PROCESS_MAX = 10 # 加工時間の最大
-JOB = 20 # ジョブの個数
+JOB = 10 # ジョブの個数
 WORKER = 3 # 作業員の人数
 PATTERN = 3 # 部品タイプの数
-MACHINE = 6
 MACHINE_SELECTION = {1:[1,2],2:[3,4],3:[5,6]} # タイプから担当機械を選択する辞書を作成
-
+MACHINE = max(max(MACHINE_SELECTION.values()))
 
 class SimpleGA:
     def __init__(self):
@@ -46,9 +45,9 @@ class Chromosome:
             self.selected_machine.append(self.sample)
         self.array_selected_machine = np.array(self.selected_machine).reshape(JOB,1)
         
-        # 機械ごとの作業順番の設定
-        self.order_sample = [0,0,0,0,0,0]
+        self.order_sample = [0] * MACHINE
         self.order = []
+        
         for i in self.array_selected_machine:
             self.order_sample[int(i-1)] += 1
             self.order.append(self.order_sample[int(i-1)])
