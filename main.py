@@ -9,6 +9,7 @@ WORKER = 3 # 作業員の人数
 PATTERN = 3 # 部品タイプの数
 MACHINE_SELECTION = {1:[1,2],2:[3,4],3:[5,6]} # タイプから担当機械を選択する辞書を作成
 MACHINE = max(max(MACHINE_SELECTION.values()))
+SKILL_LEVEL = {(1,1):1,(1,2):2,(1,3):3,(1,4):4,(1,5):5,(1,6):6,(2,1):1,(2,2):2,(2,3):3,(2,4):4,(2,5):5,(2,6):6,(3,1):1,(3,2):2,(3,3):3,(3,4):4,(3,5):5,(3,6):6}
 
 class SimpleGA:
     def __init__(self):
@@ -53,21 +54,24 @@ class Chromosome:
             self.order.append(self.order_sample[int(i-1)])
             
         self.array_order = np.array(self.order).reshape(JOB,1)
+        self.list_net_work_time = []
+        for i in range(JOB):
+            self.ability = SKILL_LEVEL[(int(self.array_worker[i])),int(self.array_selected_machine[i])]
+            self.net_process_time = self.array_process_time[i] * self.ability
+            self.list_net_work_time.append(self.net_process_time)
+        self.array_net_work_time = np.array(self.list_net_work_time).reshape(JOB,1)
         
         # 一つの行列に結合
         self.gene = np.concatenate([self.array_process_time,self.array_worker,self.array_selected_machine,
-                                    self.array_order],axis = 1)
+                                    self.array_order,self.array_net_work_time],axis = 1)
+        
         # self.MUTATION_RATE = 0.05 # 突然変異率
-
+    
     def mutate(self):
         pass
 
     def getVal(self): # 遺伝子型から表現型への発現
         # net_work_timeの関数を作成
         pass
-    def net_work_time(self,process_time,worker): # 正味作業時間の計算（段取り時間×作業者の技能度）
-        # 辞書型で、作業者と機械の技能係数を設定する?
-        pass
-
     def getFitness(self): # 適応度評価
         pass
