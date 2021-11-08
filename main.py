@@ -9,7 +9,40 @@ WORKER = 3 # 作業員の人数
 PATTERN = 3 # 部品タイプの数
 MACHINE_SELECTION = {1:[1,2],2:[3,4],3:[5,6]} # タイプから担当機械を選択する辞書を作成
 MACHINE = max(max(MACHINE_SELECTION.values()))
-SKILL_LEVEL = {(1,1):1,(1,2):2,(1,3):3,(1,4):4,(1,5):5,(1,6):6,(2,1):1,(2,2):2,(2,3):3,(2,4):4,(2,5):5,(2,6):6,(3,1):1,(3,2):2,(3,3):3,(3,4):4,(3,5):5,(3,6):6}
+import openpyxl
+from openpyxl.descriptors.base import Length
+#ファイルのパスを指定
+file_path = r"C:\Users\nabem\Documents\sample.xlsx"
+
+#ファイルを開く
+excelBook = openpyxl.load_workbook(file_path)
+
+#特定のシートを読み込む
+excelSheet = excelBook["Sheet1"]
+
+#作業者と機械のペアのリストを作成
+worker_machine = []
+#作業者３人と機械６台のペア
+# #作業者３人
+for w in range(3,excelSheet.max_row+1):
+    #機械６台
+    for i in range(3,excelSheet.max_column+1):
+        pair_worker_machine = (excelSheet.cell(row=w,column=2).value,excelSheet.cell(row=2,column=i).value)
+        worker_machine.append(pair_worker_machine)
+
+#技能度のリストを作成
+skill = []
+#作業者３人の機械6台における技能度
+# #作業者３人
+for v in range(3,excelSheet.max_row+1):
+    #機械6台
+    for z in range(3,excelSheet.max_column+1):
+        SKILL_LEVEL_worker_machine = excelSheet.cell(row=3,column=z).value
+        skill.append(SKILL_LEVEL_worker_machine)
+
+#2つのリストから辞書型を生成
+SKILL_LEVEL = dict(zip(worker_machine,skill))
+
 
 class SimpleGA:
     def __init__(self):
