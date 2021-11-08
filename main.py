@@ -1,5 +1,8 @@
 import numpy as np
 import random
+import os
+import openpyxl
+from openpyxl.descriptors.base import Length
 
 # 問題の設定
 PROCESS_MIN = 1 # 加工時間の最小
@@ -9,13 +12,14 @@ WORKER = 3 # 作業員の人数
 PATTERN = 3 # 部品タイプの数
 MACHINE_SELECTION = {1:[1,2],2:[3,4],3:[5,6]} # タイプから担当機械を選択する辞書を作成
 MACHINE = max(max(MACHINE_SELECTION.values()))
-import openpyxl
-from openpyxl.descriptors.base import Length
+
 #ファイルのパスを指定
-file_path = r"C:\Users\nabem\Documents\sample.xlsx"
+# file_path = r"C:\Users\nabem\Documents\sample.xlsx"
+path = os.getcwd()
+skill_level = os.path.join(path,"skill_level.xlsx")
 
 #ファイルを開く
-excelBook = openpyxl.load_workbook(file_path)
+excelBook = openpyxl.load_workbook(skill_level)
 
 #特定のシートを読み込む
 excelSheet = excelBook["Sheet1"]
