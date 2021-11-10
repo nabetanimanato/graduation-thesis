@@ -13,35 +13,6 @@ PATTERN = 3 # 部品タイプの数
 MACHINE_SELECTION = {1:[1,2],2:[3,4],3:[5,6]} # タイプから担当機械を選択する辞書を作成
 MACHINE = max(max(MACHINE_SELECTION.values()))
 
-#ジョブの加工時間をExcelからインポート
-#ファイルのパスを指定
-#job_time = r"C:\Users\nabem\Documents\graduation-thesis\process_time_sample.xlsx"
-path = os.getcwd()
-job_time = os.path.join(path,"process_time_sample.xlsx")
-
-#ファイルを開く
-job_excelBook = openpyxl.load_workbook(job_time)
-
-#特定のシートを読み込む
-job_excelSheet = job_excelBook["process_time"]
-
-#ジョブのリスト
-job = []
-for k in range(3,job_excelSheet.max_row+1):
-    job_No = job_excelSheet.cell(row=k,column=2).value
-    job.append(job_No)
-
-#ジョブにおける加工時間のリスト
-process_time = []
-for y in range(3,job_excelSheet.max_row+1):
-    process = job_excelSheet.cell(row=y,column=3).value
-    process_time.append(process)
-
-#２つのリストを結合
-job_process_time = list(zip(job,process_time))
-
-
-#スキルレベルをExcelからインポート
 #ファイルのパスを指定
 # file_path = r"C:\Users\nabem\Documents\sample.xlsx"
 path = os.getcwd()
